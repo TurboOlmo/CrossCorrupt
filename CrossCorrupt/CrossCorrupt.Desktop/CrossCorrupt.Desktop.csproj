@@ -1,22 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <!-- Modern .NET instead of .NET Framework 4.6.1, so no Mono is needed on Linux/macOS. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <!-- Run on whatever newer .NET runtime is installed (9, 10, ...) instead of requiring exactly 8. -->
+    <RollForward>LatestMajor</RollForward>
+    <!-- Eto.Platform.Mac64 builds a .app bundle; only do that when building on macOS. -->
+    <MacBundleRuntimeIdentifiers>osx-x64;osx-arm64</MacBundleRuntimeIdentifiers>
+    <MacBuildBundle Condition="!$([MSBuild]::IsOSPlatform(OSX))">False</MacBuildBundle>
     <ApplicationManifest>CrossCorrupt.manifest</ApplicationManifest>
     <ApplicationIcon>CC.ico</ApplicationIcon>
     <Description></Description>
     <StartupObject></StartupObject>
   </PropertyGroup>
-	
+
+  <!-- WPF backend only exists on Windows. -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\CrossCorrupt\CrossCorrupt.csproj" />
   </ItemGroup>
-	
+
+  <!-- Floating versions: restore picks the newest Eto 2.x instead of one hard-coded release. -->
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.4.1" />
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.4.1" />
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.4.1" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.*" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.*" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.*" Condition="'$(OS)' == 'Windows_NT'" />
   </ItemGroup>
-	
+
 </Project>

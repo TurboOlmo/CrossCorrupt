@@ -27,7 +27,14 @@ Here are what we officially support:
 The app should work on Linux, but you will have to compile it yourself.
 
 ## Compiling it yourself
-You will need Visual Studio Community 2017 (Windows or Mac) or later to compile this. Open the .SLN and press Build Solution. Then you can run the app!
+You need the [.NET SDK](https://dotnet.microsoft.com/download) 8 or newer (any later version works). On Linux you also need GTK 3.
+
+```
+dotnet build CrossCorrupt.sln
+dotnet run --project CrossCorrupt/CrossCorrupt.Desktop
+```
+
+You can also open the .SLN in Visual Studio or Rider and build from there. Eto.Forms is referenced as `2.*`, so it restores the newest 2.x release instead of a fixed version.
 For more detailed instructions, see the [Wiki](https://github.com/Ravbug/CrossCorrupt/wiki).
   
  ## Issue reporting
